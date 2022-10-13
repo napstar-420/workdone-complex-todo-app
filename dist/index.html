@@ -12,7 +12,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Workdo - todo app | Get your work done - Napstar</title>
-    <script src="./bundle.js" defer="defer"></script>
+    <script src="./index.bundle.js" defer="defer"></script>
+    <script src="./task.bundle.js" defer="defer"></script>
 </head>
 <body>
     <header>
@@ -48,8 +49,19 @@
                 </button>
             </div>
         </nav>
-        <div class="task-container">
-            
+        <div class="main-container">
+            <div class="top-container">
+                <div class="greeting-container">
+                    <h2 class="greeting">Welcome! <span>Napstar</span>.</h2>
+                    <p class="sub-greeting">Let's accomplish something.</p>
+                </div>
+                <button class="add-task-btn" id="add-task-btn">
+                    <span class="material-icons">
+                        add_task
+                    </span>
+                    Add Task
+                </button>
+            </div>
         </div>
     </main>
 </body>
