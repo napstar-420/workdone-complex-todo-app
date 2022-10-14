@@ -14,7 +14,7 @@ export default class UI {
         const model = document.getElementById('add-project-model');
         model.classList.remove('hidden');
     }
-    
+
     static createProjectNameErrorMsg (name) {
         const span = document.querySelector('.project-name-error-msg');
         span.textContent = `${name} project has already been made.`;
@@ -36,7 +36,7 @@ export default class UI {
         projectsTab.appendChild(projectLink);
         // Adds the Project option in the Add task model select
         const projectOption = document.createElement('option');
-        projectOption.value = project.name;
+        projectOption.value = project.id;
         projectOption.textContent = project.name;
         Task.taskProject.appendChild(projectOption);
         // Closes the Add Project Model
