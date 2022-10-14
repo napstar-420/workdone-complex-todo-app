@@ -3,7 +3,9 @@ const path = require('path');
 module.exports = {
     entry: {
       index: './src/index.js',
-      task: './src/task.js'
+      task: './src/task.js',
+      project: './src/task.js',
+      ui: './src/UI.js'
     },
     mode: 'development',
     output: {

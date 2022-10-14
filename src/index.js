@@ -1,5 +1,10 @@
 import './style.css';
-import task from './task';
+import Task from './task';
+import UI from './UI';
+import Project from './project'
 
-task.openTaskBModelBtn.addEventListener('click', task.openModel)
-task.cancelAddTaskBtn.addEventListener('click', task.closeModel);
+Task.openTaskBModelBtn.addEventListener('click', UI.openAddTaskModel);
+Task.cancelAddTaskBtn.addEventListener('click', UI.closeAddTaskModel);
+Project.openProjectModelBtn.addEventListener('click', UI.openAddProjectModel);
+Project.cancelAddProjectBtn.addEventListener('click', UI.closeAddProjectModel);
+Project.createProjectBtn.addEventListener('click', Project.createProject);

@@ -1,108 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional todo app made for people how are busy.">
-    <meta name="keywords" content="todo, todo app, list">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Professional todo app made for people how are busy."
+    />
+    <meta name="keywords" content="todo, todo app, list" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
     <title>Workdo - todo app | Get your work done - Napstar</title>
     <script src="./index.bundle.js" defer="defer"></script>
     <script src="./task.bundle.js" defer="defer"></script>
-</head>
-<body>
+    <script src="./project.bundle.js" defer="defer"></script>
+    <script src="./ui.bundle.js" defer="defer"></script>
+  </head>
+  <body>
     <header>
-        <h2 class="header-title">Work done</h2>
-        <div class="header-btn-wrapper">
-            <button class="login-btn button">Login</button>
-            <button class="sign-up-btn button">Sign up</button>
-        </div>
+      <h2 class="header-title">Work done</h2>
+      <div class="header-btn-wrapper">
+        <button class="login-btn button">Login</button>
+        <button class="sign-up-btn button">Sign up</button>
+      </div>
     </header>
     <main>
-        <nav>
-            <div>
-                <button class="nav_link">
-                    <span class="material-icons">radar</span>
-                    Today
-                </button>
-                <button class="nav_link">
-                    <span class="material-icons">date_range</span>
-                    Next 7 Days
-                </button>
-                <button class="nav_link">
-                    <span class="material-icons">done_all</span>
-                    All Tasks
-                </button>
-            </div>
-            <div>
-                <h2>Projects</h2>
-                <button id="add_project_btn" class="nav_link">
-                    <span class="material-icons">
-                        playlist_add
-                    </span>
-                Add Project
-                </button>
-            </div>
-        </nav>
-        <div class="main-container">
-            <div class="top-container">
-                <div class="greeting-container">
-                    <h2 class="greeting">Welcome! <span>Zohaib K</span>.</h2>
-                    <p class="sub-greeting">Let's accomplish something.</p>
-                </div>
-                <button class="open-task-model-btn button" id="open-task-model-btn">
-                    <span class="material-icons">
-                        add_task
-                    </span>
-                    Add Task
-                </button>
-            </div>
+      <nav>
+        <div>
+          <button class="nav_link">
+            <span class="material-icons">radar</span>
+            Today
+          </button>
+          <button class="nav_link">
+            <span class="material-icons">date_range</span>
+            Next 7 Days
+          </button>
+          <button class="nav_link">
+            <span class="material-icons">done_all</span>
+            All Tasks
+          </button>
         </div>
+        <div>
+          <h2>Projects</h2>
+          <button id="open-project-model-btn" class="nav_link">
+            <span class="material-icons"> playlist_add </span>
+            Add Project
+          </button>
+          <div class="" id="projects-tab">
+          </div>
+        </div>
+        <div class="hidden" id="add-project-model">
+          <form action="">
+            <label for="project-title " class="label">Name</label>
+            <input
+              type="text"
+              name="project-title"
+              id="project-title"
+              class="form-control"
+              placeholder="e.g. Home"
+              required
+            />
+            <span>
+              <button
+                class="add-project-btn button add-btn"
+                id="add-project-btn"
+              >
+                Create
+              </button>
+              <button
+                class="cancel-add-project-btn button cancel-btn"
+                id="cancel-add-project-btn"
+                type="button"
+              >
+                Cancel
+              </button>
+            </span>
+            <span class="project-name-error-msg"></span>
+          </form>
+        </div>
+      </nav>
+      <div class="main-container">
+        <div class="top-container">
+          <div class="greeting-container">
+            <h2 class="greeting">Welcome! <span>Zohaib K</span>.</h2>
+            <p class="sub-greeting">Let's accomplish something.</p>
+          </div>
+          <button class="open-task-model-btn button" id="open-task-model-btn">
+            <span class="material-icons"> add_task </span>
+            Add Task
+          </button>
+        </div>
+      </div>
     </main>
     <div class="model hidden" id="add-task-model">
-        <form action="" class="add-task-form">
-            <span>
-                <h2>New Task</h2>
-            </span>
-            <span>
-                <label for="task-title">Title*</label>
-                <input class="form-control" type="text" id="task-title" name="task-title" placeholder="Meeting with John" required autocomplete="off">
-            </span>
-            <span>
-                <label for="task-desc">Description*</label>
-                <textarea class="form-control" placeholder="John will wait at the society park." style="resize: none;" name="task-desc" id="task-desc" cols="30" rows="5" required autocomplete="off"></textarea>
-            </span>
-            <span class="due-date-span">
-                <label for="task-due-date">Due Date*</label>
-                <span>
-                    <input class="form-control" type="time" name="task-due-time" id="task-due-time">
-                    <input class="form-control" type="date" name="task-due-date" id="task-due-date" required>
-                </span>
-            </span>
-            <span class="priority-span">
-                <label for="task-priority">Priority</label>
-                <select name="task-priority" class="form-control" id="task-priority">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-            </span>
-            <span class="project-span">
-                <label for="task-project">Project</label>
-                <select class="form-control" name="task-project" id="task-project" required>
-                    <option value="">
-                        <button>New Project</button>
-                    </option>
-                </select>
-            </span>
-            <button type="submit" id="add-task-btn" class="button">Add Task</button>
-            <button type="reset" id="cancel-add-task-btn" class="button">Cancel</button>
-        </form>
+      <form action="" class="add-task-form">
+        <span>
+          <h2>New Task</h2>
+        </span>
+        <span>
+          <label for="task-title" class="label">Title*</label>
+          <input
+            class="form-control"
+            type="text"
+            id="task-title"
+            name="task-title"
+            placeholder="Meeting with John"
+            required
+            autocomplete="off"
+          />
+        </span>
+        <span>
+          <label for="task-desc" class="label">Description*</label>
+          <textarea
+            class="form-control"
+            placeholder="John will wait at the society park."
+            style="resize: none"
+            name="task-desc"
+            id="task-desc"
+            cols="30"
+            rows="5"
+            required
+            autocomplete="off"
+          ></textarea>
+        </span>
+        <span class="due-date-span">
+          <label for="task-due-date" class="label">Due Date*</label>
+          <span>
+            <input
+              class="form-control"
+              type="time"
+              name="task-due-time"
+              id="task-due-time"
+            />
+            <input
+              class="form-control"
+              type="date"
+              name="task-due-date"
+              id="task-due-date"
+              required
+            />
+          </span>
+        </span>
+        <span class="priority-span">
+          <label for="task-priority" class="label">Priority</label>
+          <select name="task-priority" class="form-control" id="task-priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </span>
+        <span class="project-span">
+          <label for="task-project" class="label">Project</label>
+          <select
+            class="form-control"
+            name="task-project"
+            id="task-project"
+            required
+          >
+            <option value="">
+              Select a Project
+            </option>
+          </select>
+        </span>
+        <button type="submit" id="add-task-btn" class="button add-btn">
+          Add Task
+        </button>
+        <button type="reset" id="cancel-add-task-btn" class="button cancel-btn">
+          Cancel
+        </button>
+      </form>
     </div>
-</body>
+  </body>
 </html>
