@@ -8,9 +8,9 @@
     <meta name="keywords" content="todo, todo app, list">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
     <title>Workdo - todo app | Get your work done - Napstar</title>
     <script src="./index.bundle.js" defer="defer"></script>
     <script src="./task.bundle.js" defer="defer"></script>
@@ -19,8 +19,8 @@
     <header>
         <h2 class="header-title">Work done</h2>
         <div class="header-btn-wrapper">
-            <button class="login-btn">Login</button>
-            <button class="sign-up-btn">Sign up</button>
+            <button class="login-btn button">Login</button>
+            <button class="sign-up-btn button">Sign up</button>
         </div>
     </header>
     <main>
@@ -52,10 +52,10 @@
         <div class="main-container">
             <div class="top-container">
                 <div class="greeting-container">
-                    <h2 class="greeting">Welcome! <span>Napstar</span>.</h2>
+                    <h2 class="greeting">Welcome! <span>Zohaib K</span>.</h2>
                     <p class="sub-greeting">Let's accomplish something.</p>
                 </div>
-                <button class="add-task-btn" id="add-task-btn">
+                <button class="open-task-model-btn button" id="open-task-model-btn">
                     <span class="material-icons">
                         add_task
                     </span>
@@ -64,5 +64,45 @@
             </div>
         </div>
     </main>
+    <div class="model hidden" id="add-task-model">
+        <form action="" class="add-task-form">
+            <span>
+                <h2>New Task</h2>
+            </span>
+            <span>
+                <label for="task-title">Title*</label>
+                <input class="form-control" type="text" id="task-title" name="task-title" placeholder="Meeting with John" required autocomplete="off">
+            </span>
+            <span>
+                <label for="task-desc">Description*</label>
+                <textarea class="form-control" placeholder="John will wait at the society park." style="resize: none;" name="task-desc" id="task-desc" cols="30" rows="5" required autocomplete="off"></textarea>
+            </span>
+            <span class="due-date-span">
+                <label for="task-due-date">Due Date*</label>
+                <span>
+                    <input class="form-control" type="time" name="task-due-time" id="task-due-time">
+                    <input class="form-control" type="date" name="task-due-date" id="task-due-date" required>
+                </span>
+            </span>
+            <span class="priority-span">
+                <label for="task-priority">Priority</label>
+                <select name="task-priority" class="form-control" id="task-priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </span>
+            <span class="project-span">
+                <label for="task-project">Project</label>
+                <select class="form-control" name="task-project" id="task-project" required>
+                    <option value="">
+                        <button>New Project</button>
+                    </option>
+                </select>
+            </span>
+            <button type="submit" id="add-task-btn" class="button">Add Task</button>
+            <button type="reset" id="cancel-add-task-btn" class="button">Cancel</button>
+        </form>
+    </div>
 </body>
 </html>
