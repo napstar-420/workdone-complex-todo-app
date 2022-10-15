@@ -2,15 +2,17 @@ import Project from "./project";
 import UI from "./UI";
 
 export default class Task {
+
     static openTaskBModelBtn = document.getElementById('open-task-model-btn');
     static addTaskBtn = document.getElementById('add-task-btn');
     static cancelAddTaskBtn = document.getElementById('cancel-add-task-btn');
     static taskTitle = document.getElementById('task-title');
     static taskDesc = document.getElementById('task-desc');
-    static taskDueDate = document.getElementById('task-due-time');
-    static taskDueTime = document.getElementById('task-due-date');
+    static taskDueDate = document.getElementById('task-due-date');
+    static taskDueTime = document.getElementById('task-due-time');
     static taskPriority = document.getElementById('task-priority');
     static taskProject = document.getElementById('task-project');
+    static taskContainer = document.getElementById('task-container')
 
     static createTask(e) {
         e.preventDefault();
@@ -36,7 +38,7 @@ export default class Task {
         this.desc = desc;
         this.deadline = {
             dueTime,
-            dueDate
+            dueDate,
         },
         this.priority = priority,
         this.projectId = projectId

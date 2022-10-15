@@ -1,21 +1,34 @@
 import UI from "./UI";
 
 export default class Project {
+    // Stores all the Project
     static projectList = [];
+
+    // Button that open new Project Model
     static openProjectModelBtn = document.getElementById(
         "open-project-model-btn"
     );
+
+    // Button that creates a new Project
     static createProjectBtn = document.getElementById("add-project-btn");
+
+    // Button that closes the new Project model
     static cancelAddProjectBtn = document.getElementById(
         "cancel-add-project-btn"
     );
+
+    // Where all the Project links are shown in the UI
     static projectsTab = document.getElementById("projects-tab");
+
+    // Input tag in which user can type new project name
     static projectName = document.getElementById("project-title");
 
+    // Adds Created project to the Project list
     static addProject = function addProjectToProductList(project, list) {
         list.push(project);
     };
 
+    // Creates a new Project
     static createProject = function createProjectAndUpdateUI(e) {
         e.preventDefault();
         const projectName = Project.projectName.value;
@@ -27,6 +40,7 @@ export default class Project {
         }
     };
 
+    // Check if Project name is valid and has not already been created
     static checkProject = function checkIfProjectAlreadyExistAndNameIsValid(name) {
         let newProjectName = name;
         newProjectName = newProjectName.trim();
@@ -48,6 +62,7 @@ export default class Project {
         this.tasks = [];
     }
 
+    // Pushes task to Tasks array of the project
     addTask(task) {
         this.tasks.push(task);
     }
