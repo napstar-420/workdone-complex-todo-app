@@ -27,8 +27,8 @@
     <header>
       <h2 class="header-title">Work done</h2>
       <div class="header-btn-wrapper">
-        <button class="login-btn button">Login</button>
-        <button class="sign-up-btn button">Sign up</button>
+        <button class="login-btn btn">Login</button>
+        <button class="sign-up-btn btn">Sign up</button>
       </div>
     </header>
     <main>
@@ -47,15 +47,15 @@
             All Tasks
           </button>
         </div>
-        <div>
+        <div class="projects-tab-container flex-1">
           <h2>Projects</h2>
-          <button id="open-project-model-btn" class="nav_link">
+          <div class="flex-1" id="projects-tab">
+          </div>
+        </div>
+        <button id="open-project-model-btn" class="nav_link">
             <span class="material-icons"> playlist_add </span>
             Add Project
           </button>
-          <div class="" id="projects-tab">
-          </div>
-        </div>
         <div class="hidden" id="add-project-model">
           <form action="">
             <label for="project-title " class="label">Name</label>
@@ -69,13 +69,14 @@
             />
             <span>
               <button
-                class="add-project-btn button add-btn"
+                class="add-project-btn btn add-btn"
                 id="add-project-btn"
+                type="button"
               >
                 Create
               </button>
               <button
-                class="cancel-add-project-btn button cancel-btn"
+                class="cancel-add-project-btn btn cancel-btn"
                 id="cancel-add-project-btn"
                 type="button"
               >
@@ -92,7 +93,7 @@
             <h2 class="intro">Welcome! <span>Zohaib K</span>.</h2>
             <p class="sub-greeting">Let's accomplish something.</p>
           </div>
-          <button class="open-task-model-btn button" id="open-task-model-btn">
+          <button class="open-task-model-btn btn" id="open-task-model-btn">
             <span class="material-icons"> add_task </span>
             Add Task
           </button>
@@ -155,9 +156,9 @@
         <span class="priority-span">
           <label for="task-priority" class="label">Priority</label>
           <select name="task-priority" class="form-control" id="task-priority">
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low" class="color-low">Low</option>
+            <option value="medium" class="color-medium">Medium</option>
+            <option value="high" class="color-high">High</option>
           </select>
         </span>
         <span class="project-span">
@@ -173,10 +174,10 @@
             </option>
           </select>
         </span>
-        <button type="submit" id="add-task-btn" class="button add-btn">
+        <button type="button" id="add-task-btn" class="btn add-btn">
           Add Task
         </button>
-        <button type="reset" id="cancel-add-task-btn" class="button cancel-btn">
+        <button type="resets" id="cancel-add-task-btn" class="btn cancel-btn">
           Cancel
         </button>
       </form>

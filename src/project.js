@@ -1,4 +1,5 @@
 import BrowserStorage from "./Storage";
+import Task from "./task";
 import UI from "./UI";
 
 export default class Project {
@@ -52,14 +53,26 @@ export default class Project {
                     return false;
                 }
             }
-            return true
+            return true;
         }
         return false;
     };
 
+    static deleteProject(id) {
+        this.projectList = [...Project.projectList.filter(project => project.id !== id)];
+        BrowserStorage.updateStorage();
+        UI.renderProjectsTab();
+        if(parseInt(Task.taskContainer.firstElementChild.getAttribute('data-id')) === id) {
+            UI.resetTaskContainer()
+        }
+    }
+
     constructor(name) {
         this.name = name;
-        this.id = Project.projectList.length;
+        this.id = Project.projectList.length === 0 ? 0 : Project.projectList[Project.projectList.length - 1].id + 1;
+        this.funConsole = () => {
+            console.log(this.id)
+        }
         this.tasks = [];
     }
 

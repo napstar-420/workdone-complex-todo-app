@@ -16,7 +16,6 @@ export default class Task {
     static taskContainer = document.getElementById('task-container')
 
     static createTask(e) {
-        e.preventDefault();
         const task = new Task(
             Task.taskTitle.value, 
             Task.taskDesc.value, 
@@ -25,15 +24,19 @@ export default class Task {
             Task.taskPriority.value,
             Task.taskProject.value
         )
+        console.log(task)
         Task.addTask(task);
-        console.log(task);
     }
 
     static addTask = function forwardTaskToProjectList(task) {
-        Project.projectList[task.projectId].addTask(task);
+        console.log(Project.projectList)
+        Project.projectList[task.projectId].tasks.unshift(task);
         BrowserStorage.updateStorage();
-        console.log(task)
-        UI.renderTasks(task.projectId);
+        Project.projectList.map(project => {
+            if(project.id === parseInt(task.projectId)) {
+                UI.renderTasks(project);
+            }
+        })
         UI.closeAddTaskModel();
     }
 

@@ -4,13 +4,31 @@
     --transition: all ease-in-out 0.3s;
     --main-color: rgb(135, 76, 194);
     --raleway-font: 'Raleway', sans-serif;
+    scroll-margin-left: 1rem;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+    position: relative;
+    left: 5px;
+}
+::-webkit-scrollbar-track {
+    background: #151515;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--main-color); 
+    border-radius:10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  } 
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-size: 1rem;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -31,7 +49,7 @@ body {
     place-items: center;
 }
 
-.button {
+.btn {
     padding: 0.4rem 1rem;
     display: flex;
     align-items: center;
@@ -57,6 +75,10 @@ body {
 
 .color-high {
     color: red;
+}
+
+.flex-1 {
+    flex: 1;
 }
 
 /* HEADER STYLING */
@@ -102,11 +124,44 @@ nav {
     flex-direction: column;
     width: 15rem;
     padding: 1rem;
-    min-height: calc(100vh - 4rem);
+    height: calc(100vh - 4rem);
     /* margin: 0.5rem; */
-    border-radius: 10px;
     transition: var(--transition);
     position: relative;
+}
+
+.projects-tab-container {
+    overflow-y: scroll;
+}
+
+.projectLink-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.project-del-btn {
+    color: #fff;
+    margin-left: 5px;
+    padding: 10px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.project-del-btn > i {
+    margin-right: 0;
+}
+
+.project-del-btn:hover {
+    background-color: #303030;
+    color: rgb(255, 144, 144);
+}
+
+#open-project-model-btn {
+    background-color: rgb(255, 255, 83);
+    color: #101010;
 }
 
 nav:hover {
@@ -193,6 +248,9 @@ nav h2 {
 .main-container {
     flex: 1;
     margin: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 4rem);
 }
 
 .top-container {
@@ -204,7 +262,7 @@ nav h2 {
 
 .intro {
     font-family: var(--main-font);
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: #fff;
 }
 
@@ -221,6 +279,8 @@ nav h2 {
 
 .open-task-model-btn {
     flex: none;
+    background-color: rgb(255, 255, 83);
+    color: #101010;
 }
 
 .open-task-model-btn span {
@@ -234,6 +294,16 @@ nav h2 {
 
 .open-task-model-btn:active {
     transform: translateY(5px) scale(1.1);
+}
+
+#project-title-wrapper {
+    margin-bottom: 1rem;
+}
+
+#project-title-wrapper h1 {
+    font-size: 2rem;
+    color: #fff;
+    font-family: var(--secondary-font);
 }
 
 /* ADD TASK MODEL STYLING */
@@ -304,9 +374,31 @@ nav h2 {
 /* TASK STYLING */
 
 #task-container {
+    /* flex: 1; */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
     gap: 1rem;
+    overflow-y: scroll;
+}
+
+.priority-bar {
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    height: 10px;
+    background-color: #101010;
+}
+
+.low {
+    background-color: rgb(255, 255, 83);
+}
+
+.medium {
+    background-color: rgb(216, 88, 41);
+}
+
+.high {
+    background-color: rgb(255, 0, 0);
 }
 
 .task {
@@ -318,6 +410,9 @@ nav h2 {
     background-color: #222;
     padding: 1rem;
     border-radius: 4px;
+    height: max-content;
+    position: relative;
+    overflow: hidden;
 }
 
 .desc, .time {
@@ -396,4 +491,21 @@ nav h2 {
 
 .edit-icon, .delete-icon, .complete-icon {
     margin-right: 0.3rem;
+}
+
+
+.no-task-wrapper {
+    color: rgb(122, 122, 122);
+    display: grid;
+    place-items: center;
+}
+
+.no-task-wrapper h2 {
+    font-size: 2rem;
+    font-family: var(--main-font);
+}
+
+.no-task-wrapper span {
+    color: var(--main-color);
+    font-size: inherit;
 }
