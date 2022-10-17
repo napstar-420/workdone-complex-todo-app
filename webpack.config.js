@@ -4,9 +4,11 @@ module.exports = {
     entry: {
       index: './src/index.js',
       task: './src/task.js',
-      project: './src/task.js',
-      ui: './src/UI.js'
+      project: './src/project.js',
+      ui: './src/UI.js',
+      storage: './src/Storage.js'
     },
+    devtool: 'inline-source-map',
     mode: 'development',
     output: {
         filename: '[name].bundle.js',

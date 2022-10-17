@@ -1,4 +1,5 @@
 import Project from "./project";
+import BrowserStorage from "./Storage";
 import UI from "./UI";
 
 export default class Task {
@@ -19,17 +20,20 @@ export default class Task {
         const task = new Task(
             Task.taskTitle.value, 
             Task.taskDesc.value, 
-            Task.taskDueDate.value, 
+            Task.taskDueDate.value,
             Task.taskDueTime.value, 
             Task.taskPriority.value,
             Task.taskProject.value
         )
         Task.addTask(task);
+        console.log(task);
     }
 
     static addTask = function forwardTaskToProjectList(task) {
-        Project.projectList[Task.taskProject.value].addTask(task);
-        console.log(Project.projectList[Task.taskProject.value])
+        Project.projectList[task.projectId].addTask(task);
+        BrowserStorage.updateStorage();
+        console.log(task)
+        UI.renderTasks(task.projectId);
         UI.closeAddTaskModel();
     }
 

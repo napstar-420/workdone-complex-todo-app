@@ -1,3 +1,4 @@
+import BrowserStorage from "./Storage";
 import UI from "./UI";
 
 export default class Project {
@@ -26,16 +27,16 @@ export default class Project {
     // Adds Created project to the Project list
     static addProject = function addProjectToProductList(project, list) {
         list.push(project);
+        BrowserStorage.updateStorage()
     };
 
     // Creates a new Project
-    static createProject = function createProjectAndUpdateUI(e) {
-        e.preventDefault();
+    static createProject = function createProjectAndUpdateUI() {
         const projectName = Project.projectName.value;
         if (Project.checkProject(projectName) !== false) {
             const project= new Project(projectName);
             Project.addProject(project, Project.projectList);
-            UI.addProjectToUI(Project.projectsTab, project);
+            UI.renderProjectsTab();
             Project.projectName.value = "";
         }
     };
@@ -64,6 +65,6 @@ export default class Project {
 
     // Pushes task to Tasks array of the project
     addTask(task) {
-        this.tasks.push(task);
+        this.tasks.unshift(task);
     }
 }

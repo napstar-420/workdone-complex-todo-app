@@ -1,6 +1,7 @@
 import Project from "./project";
 import Task from "./task";
 import format from "date-fns/format";
+import BrowserStorage from "./Storage";
 
 export default class UI {
     // Opens the model to create a new Task 
@@ -36,10 +37,10 @@ export default class UI {
     }
 
     // Creates a link to add to the side nav
-    static createProjectLink(name) {
+    static createProjectLink({name, id}) {
         const link = document.createElement('button');
         link.classList += 'nav_link project_link';
-        link.setAttribute('data-id', Project.projectList.length - 1)
+        link.setAttribute('data-id', id)
         link.textContent = name;
         link.addEventListener('click', this.openProject)
         return link;
@@ -54,10 +55,14 @@ export default class UI {
     }
 
     // Append the Project link and Option in the Html and closes Project model
-    static addProjectToUI (projectsTab, project) {
-        projectsTab.appendChild(this.createProjectLink(project.name));
-        Task.taskProject.appendChild(this.createProjectOption(project));
-        this.closeAddProjectModel()
+    static renderProjectsTab () {
+        Project.projectsTab.innerHTML = '';
+        const ProjectList = BrowserStorage.getProjectList();
+        ProjectList.map(project => {
+            Project.projectsTab.appendChild(this.createProjectLink(project));
+            Task.taskProject.appendChild(this.createProjectOption(project));
+        })
+        this.closeAddProjectModel();
     }
 
     // Opens Project when users clicks a Project link
@@ -68,24 +73,38 @@ export default class UI {
         UI.renderTasks(index);
     }
 
+    static renderProjectTitle(heading) {
+        document.getElementById('project-title-wrapper').innerHTML = "";
+        const projectHeading = document.createElement('h1');
+        projectHeading.classList += "project-heading";
+        projectHeading.textContent = heading;
+        document.getElementById('project-title-wrapper').appendChild(projectHeading);
+    }
+
     // Gets the tasks and render them
     static renderTasks(index) {
-        Task.taskContainer.innerHTML = '';
 
-        if(Project.projectList[index].tasks.length === 0) {
+        Task.taskContainer.innerHTML = '';
+        Task.taskProject.innerHTML = '';
+        document.getElementById('project-title-wrapper').innerHTML = "";
+        const projectList = BrowserStorage.getProjectList(); // Gets data from local storage
+        // Checks if Project has no tasks
+        if(projectList[index].tasks.length === 0) {
             Task.taskContainer.innerHTML = `
                 <div class="no-task-wrapper">
-                    Oops! Looks like <span>${Project.projectList[index].name}</span> is empty.
+                    Oops! Looks like <span>${projectList[index].name}</span> is empty.
                 </div>
             `
             return;
         }
 
-        const projectName = Project.projectList[index].name;
+        // Gets name of the Project whom tasks will be shown
+        const projectName = projectList[index].name;
+        this.renderProjectTitle(projectName)
 
-        Project.projectList[index].tasks.map(currentTask => {
+        projectList[index].tasks.map(currentTask => {
 
-            const {title, desc, deadline, priority, project} = currentTask;
+            const {title, desc, deadline, priority} = currentTask;
 
             const task = document.createElement('div');
             task.classList.add('task');
@@ -151,19 +170,21 @@ export default class UI {
         })
     }
 
+    // Formats time&date e.g. 21:09 => 11:09 PM && 2022-12-3 => 3 December, 2022
     static getFormattedTime(time) {
+        console.log(time);
         const {dueTime, dueDate} = time;
         const year = dueDate.slice(0, 4);
         const month = dueDate.slice(5, 7);
         const day = dueDate.slice(8, 10);
         const date = new Date(year, month, day);
         date.setHours(dueTime.slice(0,2), dueTime.slice(3,5));
-        console.log(date)
         const formattedTime = format(date, 'p');
         const formattedDate = format(date, 'PP');
 
         return `${formattedTime}, ${formattedDate}`
     }
+
 
     static getTimeLeft(time) {
         const {dueTime, dueDate} = time;
@@ -177,8 +198,8 @@ export default class UI {
         taskDueDate.setHours(endHour, endMin);
         const timeLeft = new Date(taskDueDate.getTime() - presentDate.getTime());
         const days = timeLeft.getUTCDate() - 1; // Gives day count of difference
-        const hours = timeLeft.getUTCHours();
-        const mins = timeLeft.getUTCMinutes();
+        const hours = timeLeft.getUTCHours(); // Gives hours difference
+        const mins = timeLeft.getUTCMinutes(); // gives mins difference
 
         return `${days === 0 ? "" : `${days} Days,`} 
                 ${hours === 0 ? "" : `${hours} Hrs,`} 
