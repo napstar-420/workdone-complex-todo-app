@@ -13,7 +13,9 @@ export default class Task {
     static taskDueTime = document.getElementById('task-due-time');
     static taskPriority = document.getElementById('task-priority');
     static taskProject = document.getElementById('task-project');
-    static taskContainer = document.getElementById('task-container')
+    static taskContainer = document.getElementById('task-container');
+
+    static taskList = []
 
     static createTask(e) {
         const task = new Task(
@@ -24,24 +26,37 @@ export default class Task {
             Task.taskPriority.value,
             Task.taskProject.value
         )
-        console.log(task)
         Task.addTask(task);
     }
 
     static addTask = function forwardTaskToProjectList(task) {
-        console.log(Project.projectList)
         Project.projectList[task.projectId].tasks.unshift(task);
+        Task.taskList.unshift(task);
+        Project.openProject(parseInt(task.projectId));
+        BrowserStorage.updateStorage();
+        // opens the project
+        // Closes the Add task model
+        UI.closeAddTaskModel();
+    }
+
+    static deleteTask(projectId, taskId) {
+        Project.removeTaskFromProjectList(projectId, taskId);
+        Task.removeTaskFromTaskList(taskId);
         BrowserStorage.updateStorage();
         Project.projectList.map(project => {
-            if(project.id === parseInt(task.projectId)) {
+            if(project.id === parseInt(projectId)) {
                 UI.renderTasks(project);
             }
         })
-        UI.closeAddTaskModel();
+    }
+
+    static removeTaskFromTaskList(id) {
+        Task.taskList = Task.taskList.filter(task => task.taskId !== id);
     }
 
     constructor(title, desc, dueDate, dueTime, priority, projectId) {
         this.title = title;
+        this.taskId = Task.taskList.length === 0 ? 0 : Task.taskList[0].taskId + 1;
         this.desc = desc;
         this.deadline = {
             dueTime,

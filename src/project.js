@@ -59,20 +59,64 @@ export default class Project {
     };
 
     static deleteProject(id) {
+        if(this.isProjectOpened(id) === true) {
+            console.log('got it');
+            UI.resetTaskContainer()
+        }
         this.projectList = [...Project.projectList.filter(project => project.id !== id)];
         BrowserStorage.updateStorage();
         UI.renderProjectsTab();
-        if(parseInt(Task.taskContainer.firstElementChild.getAttribute('data-id')) === id) {
-            UI.resetTaskContainer()
+    }
+
+    // Opens Project when users clicks a Project link
+    static openProject(projectId) {
+        [...document.querySelectorAll('.nav_link')].map(link => link.classList.remove('active'));
+        [...document.querySelectorAll('.nav_link')].map(link => {
+            if(parseInt(link.getAttribute('data-projectId')) === projectId){
+                console.log('getting')
+                link.classList.add('active');
+            }
+        })
+        Project.projectList.map(project => {
+            project.isOpened = false;
+            if(project.id === parseInt(projectId)) {
+                UI.renderTasks(project);
+                project.isOpened = true;
+            }
+        })
+    }
+
+    
+    static removeTaskFromProjectList(projectId, taskId) {
+        Project.projectList.map(project => {
+            if(project.id === projectId) {
+                project.tasks = project.tasks.filter(task => task.taskId !== taskId)
+            }
+        });
+    }
+
+    static getProject(id) {
+        let projectObj = {}
+        Project.projectList.map(project => {
+            if(project.id === id) {
+                projectObj = {...project};
+            }
+        });
+        return projectObj;
+    }
+
+    static isProjectOpened(id) {
+        const project = this.getProject(id);
+        console.log(project)
+        if(project.isOpened === true) {
+            return true;
         }
     }
 
     constructor(name) {
         this.name = name;
         this.id = Project.projectList.length === 0 ? 0 : Project.projectList[Project.projectList.length - 1].id + 1;
-        this.funConsole = () => {
-            console.log(this.id)
-        }
+        this.isOpened = false;
         this.tasks = [];
     }
 

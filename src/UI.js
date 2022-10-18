@@ -47,9 +47,9 @@ export default class UI {
         linkWrapper.classList = 'projectLink-wrapper'
         const link = document.createElement('button');
         link.classList = 'nav_link project_link flex-1';
-        link.setAttribute('data-id', id)
+        link.setAttribute('data-projectId', id)
         link.textContent = name;
-        link.addEventListener('click', this.openProject);
+        link.addEventListener('click', () => Project.openProject(id));
         linkWrapper.appendChild(link);
         linkWrapper.appendChild(this.createProjectDelBtn(id))
         return linkWrapper;
@@ -60,7 +60,7 @@ export default class UI {
         const delBtn = document.createElement('span');
         delBtn.classList += 'project-del-btn';
         delBtn.innerHTML = '<i class="fa-regular fa-trash-can delete-icon"></i>';
-        delBtn.setAttribute('data-id', id);
+        delBtn.setAttribute('data-projectId', id);
         delBtn.addEventListener('click', () => Project.deleteProject(id))
         return delBtn;
     }
@@ -85,18 +85,6 @@ export default class UI {
         this.closeAddProjectModel();
     }
 
-    // Opens Project when users clicks a Project link
-    static openProject(e) {
-        const projectId = e.target.getAttribute('data-id');
-        [...document.querySelectorAll('.nav_link')].map(link => link.classList.remove('active'))
-        e.target.classList.add('active');
-        Project.projectList.map(project => {
-            if(project.id === parseInt(projectId)) {
-                UI.renderTasks(project);
-            }
-        })
-    }
-
     static renderProjectTitle(heading) {
         document.getElementById('project-title-wrapper').innerHTML = "";
         const projectHeading = document.createElement('h1');
@@ -106,8 +94,7 @@ export default class UI {
 
     // Gets the tasks and render them
     static renderTasks(project) {
-        Task.taskContainer.innerHTML = '';
-        document.getElementById('project-title-wrapper').innerHTML = '';
+        this.resetTaskContainer();
         // Checks if Project has no tasks
         if(project.tasks.length === 0) {
             Task.taskContainer.classList.add('flex-1')
@@ -118,6 +105,7 @@ export default class UI {
             `
             return;
         }
+        // Remove the class 'flex-1' so the taskContainer will only take required height
         Task.taskContainer.classList.remove('flex-1')
 
         // Gets name of the Project whom tasks will be shown
@@ -130,11 +118,12 @@ export default class UI {
 
             const task = document.createElement('div');
             task.classList.add('task');
-            task.setAttribute('data-id', project.id)
+            task.setAttribute('data-ProjectId', project.id);
+            task.setAttribute('data-taskId', currentTask.taskId);
+
             // Priority Color top bar
             const priorityBar = document.createElement('span');
             priorityBar.classList += `priority-bar ${priority}`;
-            console.log(priority)
 
             // Task Title
             const taskTitle = document.createElement('h2');
@@ -169,20 +158,28 @@ export default class UI {
             // Task Actions
             const taskActions = document.createElement('div');
             taskActions.classList += 'task-actions';
-            taskActions.innerHTML = `
-                <button class="edit-task btn">
-                    <i class="fa-sharp fa-solid fa-pen edit-icon"></i>
-                    <span>Edit</span>
-                </button>
-                <button class="delete-task btn">
-                    <i class="fa-regular fa-trash-can delete-icon"></i>
-                    <span>Delete</span>
-                </button>
-                <button class="complete-task btn">
-                    <i class="fa-solid fa-circle-check complete-icon"></i>
-                    Complete
-                </button>
-            `
+
+            const editTaskBtn = document.createElement('button');
+            editTaskBtn.classList += 'edit-task btn';
+            editTaskBtn.setAttribute('id', 'edit-task-btn')
+            editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`
+
+            const deleteTaskBtn = document.createElement('button');
+            deleteTaskBtn.classList += 'delete-task btn'
+            deleteTaskBtn.setAttribute('id', 'delete-task-btn');
+            // deleteTaskBtn.setAttribute('data-projectId', )
+            // deleteTaskBtn.setAttribute('data-taskId', )
+            deleteTaskBtn.innerHTML = `<i class="fa-regular fa-trash-can delete-icon"></i><span>Delete</span>`
+            deleteTaskBtn.addEventListener('click', () => Task.deleteTask(parseInt(currentTask.projectId), currentTask.taskId))
+
+            const completeTaskBtn = document.createElement('button');
+            completeTaskBtn.classList += 'complete-task btn';
+            completeTaskBtn.setAttribute('id', 'complete-task-btn');
+            completeTaskBtn.innerHTML = `<i class="ffa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
+
+           taskActions.appendChild(editTaskBtn);
+           taskActions.appendChild(deleteTaskBtn);
+           taskActions.appendChild(completeTaskBtn);
 
             // Appending
             task.appendChild(priorityBar);
@@ -200,7 +197,6 @@ export default class UI {
 
     // Formats time&date e.g. 21:09 => 11:09 PM && 2022-12-3 => 3 December, 2022
     static getFormattedTime(time) {
-        console.log(time);
         const {dueTime, dueDate} = time;
         const year = dueDate.slice(0, 4);
         const month = dueDate.slice(5, 7);
