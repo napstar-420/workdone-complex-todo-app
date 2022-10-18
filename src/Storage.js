@@ -1,4 +1,5 @@
 import Project from "./project";
+import Task from "./task";
 
 export default class BrowserStorage {
 
@@ -12,5 +13,17 @@ export default class BrowserStorage {
 
     static getProjectList() {
         return JSON.parse(localStorage.getItem('projectList'))
+    }
+
+    static setTaskList() {
+        localStorage.setItem('taskList', JSON.stringify([]))
+    }
+
+    static updateTaskList()  {
+        localStorage.setItem('taskList', JSON.stringify(Task.taskList))
+    }
+
+    static getTaskList() {
+        return JSON.parse(localStorage.getItem('taskList'));
     }
 }

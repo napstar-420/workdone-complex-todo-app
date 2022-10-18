@@ -32,9 +32,10 @@ export default class Task {
     static addTask = function forwardTaskToProjectList(task) {
         Project.projectList[task.projectId].tasks.unshift(task);
         Task.taskList.unshift(task);
+        // opens the project
         Project.openProject(parseInt(task.projectId));
         BrowserStorage.updateStorage();
-        // opens the project
+        BrowserStorage.updateTaskList();
         // Closes the Add task model
         UI.closeAddTaskModel();
     }
@@ -43,6 +44,7 @@ export default class Task {
         Project.removeTaskFromProjectList(projectId, taskId);
         Task.removeTaskFromTaskList(taskId);
         BrowserStorage.updateStorage();
+        BrowserStorage.updateTaskList();
         Project.projectList.map(project => {
             if(project.id === parseInt(projectId)) {
                 UI.renderTasks(project);

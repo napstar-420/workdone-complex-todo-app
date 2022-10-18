@@ -7,9 +7,11 @@ import BrowserStorage from './Storage';
 document.addEventListener('DOMContentLoaded', () => {
     if(localStorage.length === 0) {
         BrowserStorage.setStorage();
+        BrowserStorage.setTaskList()
     }
-    Project.projectList = BrowserStorage.getProjectList();
-    
+    console.log(Task.taskList)
+    Project.projectList = [...BrowserStorage.getProjectList()];
+    Task.taskList = [...BrowserStorage.getTaskList()];
     UI.renderProjectsTab();
 })
 

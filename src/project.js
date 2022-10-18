@@ -63,7 +63,10 @@ export default class Project {
             UI.resetTaskContainer()
         }
         this.projectList = [...Project.projectList.filter(project => project.id !== id)];
+        Task.taskList = [...Task.taskList.filter(task => parseInt(task.projectId) !== id)];
+        console.log(Task.taskList)
         BrowserStorage.updateStorage();
+        BrowserStorage.updateTaskList();
         UI.renderProjectsTab();
     }
 

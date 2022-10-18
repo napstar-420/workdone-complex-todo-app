@@ -161,21 +161,20 @@ export default class UI {
 
             const editTaskBtn = document.createElement('button');
             editTaskBtn.classList += 'edit-task btn';
-            editTaskBtn.setAttribute('id', 'edit-task-btn')
-            editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`
+            editTaskBtn.setAttribute('id', 'edit-task-btn');
+            editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`;
+            editTaskBtn.addEventListener('click', () => Task.editTask())
 
             const deleteTaskBtn = document.createElement('button');
             deleteTaskBtn.classList += 'delete-task btn'
             deleteTaskBtn.setAttribute('id', 'delete-task-btn');
-            // deleteTaskBtn.setAttribute('data-projectId', )
-            // deleteTaskBtn.setAttribute('data-taskId', )
             deleteTaskBtn.innerHTML = `<i class="fa-regular fa-trash-can delete-icon"></i><span>Delete</span>`
             deleteTaskBtn.addEventListener('click', () => Task.deleteTask(parseInt(currentTask.projectId), currentTask.taskId))
 
             const completeTaskBtn = document.createElement('button');
             completeTaskBtn.classList += 'complete-task btn';
             completeTaskBtn.setAttribute('id', 'complete-task-btn');
-            completeTaskBtn.innerHTML = `<i class="ffa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
+            completeTaskBtn.innerHTML = `<i class="fa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
 
            taskActions.appendChild(editTaskBtn);
            taskActions.appendChild(deleteTaskBtn);
