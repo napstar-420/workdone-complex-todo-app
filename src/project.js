@@ -60,6 +60,10 @@ export default class Project {
 
     static deleteProject(id) {
 
+        // Updates DOM
+        if(this.isProjectOpened(id) === true) {
+            UI.resetTaskContainer()
+        }
         // Removes Project
         this.projectList = [...Project.projectList.filter(project => project.id !== id)];
         Task.taskList = [...Task.taskList.filter(task => task.projectId !== id)];
@@ -68,10 +72,6 @@ export default class Project {
         BrowserStorage.updateStorage();
         BrowserStorage.updateTaskList();
 
-        // Updates DOM
-        if(this.isProjectOpened(id) === true) {
-            UI.resetTaskContainer()
-        }
         UI.renderProjectsTab();
     }
 
