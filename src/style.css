@@ -413,6 +413,12 @@ nav h2 {
     height: max-content;
     position: relative;
     overflow: hidden;
+    transition: all ease 2s;
+}
+
+.task-completed {
+    filter: blur(5px);
+    opacity: 0;
 }
 
 .desc, .time {

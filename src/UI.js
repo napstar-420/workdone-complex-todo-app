@@ -119,6 +119,7 @@ export default class UI {
 
             const task = document.createElement('div');
             task.classList.add('task');
+            task.setAttribute('id', `prj-${project.id}_tsk-${currentTask.taskId}`)
             task.setAttribute('data-ProjectId', project.id);
             task.setAttribute('data-taskId', currentTask.taskId);
 
@@ -176,6 +177,7 @@ export default class UI {
             completeTaskBtn.classList += 'complete-task btn';
             completeTaskBtn.setAttribute('id', 'complete-task-btn');
             completeTaskBtn.innerHTML = `<i class="fa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
+            completeTaskBtn.addEventListener('click', () => Task.completeTask(currentTask.projectId, currentTask.taskId))
 
            taskActions.appendChild(editTaskBtn);
            taskActions.appendChild(deleteTaskBtn);

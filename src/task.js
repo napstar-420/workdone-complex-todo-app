@@ -102,6 +102,14 @@ export default class Task {
     Task.taskList = Task.taskList.filter((task) => task.taskId !== id);
   }
 
+  static completeTask(projectId, taskId) {
+    const taskUiElement = document.getElementById(`prj-${projectId}_tsk-${taskId}`);
+    taskUiElement.classList.add('task-completed');
+    setTimeout(() => {
+        this.deleteTask(projectId, taskId)
+    }, 2000);
+  }
+
   // CONSTRUCTOR
 
   constructor(title, desc, dueDate, dueTime, priority, projectId) {
