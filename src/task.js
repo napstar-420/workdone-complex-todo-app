@@ -49,7 +49,7 @@ export default class Task {
     BrowserStorage.updateTaskList();
     // Removes the Task from the DOM 
     const project = Project.getProject(projectId);
-    UI.renderTasks(project);
+    UI.renderProjectTasks(project);
   }
 
   static editTask(projectId, taskId) {
@@ -94,7 +94,7 @@ export default class Task {
     BrowserStorage.updateTaskList();
 
     // Updates the DOM
-    UI.renderTasks(Project.projectList[projectIndex]);
+    UI.renderProjectTasks(Project.projectList[projectIndex]);
     UI.closeEditTaskModel();
   }
 

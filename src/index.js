@@ -45,3 +45,7 @@ Task.addTaskBtn.addEventListener("click", Task.createTask);
 Project.openProjectModelBtn.addEventListener("click", UI.openAddProjectModel);
 Project.cancelAddProjectBtn.addEventListener("click", UI.closeAddProjectModel);
 Project.createProjectBtn.addEventListener("click", Project.createProject);
+
+document.getElementById('list_today_tasks').addEventListener('click', () => UI.renderTasks('TODAY_TASKS'));
+document.getElementById('list_week_tasks').addEventListener('click', () => UI.renderTasks('WEEK_TASKS'));
+document.getElementById('list_all_tasks').addEventListener('click', () => UI.renderTasks("ALL_TASKS"));

@@ -87,7 +87,7 @@ export default class Project {
         Project.projectList.map(project => {
             project.isOpened = false;
             if(project.id === projectId) {
-                UI.renderTasks(project);
+                UI.renderProjectTasks(project);
                 project.isOpened = true;
             }
         })

@@ -1,7 +1,8 @@
 import Project from "./project";
 import Task from "./task";
-import format from "date-fns/format";
 import BrowserStorage from "./Storage";
+import {format} from "date-fns";
+import { differenceInDays } from 'date-fns'
 
 export default class UI {
     // Opens the model to create a new Task 
@@ -88,12 +89,12 @@ export default class UI {
     static renderProjectTitle(heading) {
         document.getElementById('project-title-wrapper').innerHTML = "";
         const projectHeading = document.createElement('h1');
-        projectHeading.textContent = `Project ${heading}.`;
+        projectHeading.textContent = `${heading}.`;
         document.getElementById('project-title-wrapper').appendChild(projectHeading);
     }
 
     // Gets the tasks and render them
-    static renderTasks(project) {
+    static renderProjectTasks(project) {
         this.resetTaskContainer();
         // Checks if Project has no tasks
         if(project.tasks.length === 0) {
@@ -114,96 +115,99 @@ export default class UI {
 
         // Here the Rendering start
         project.tasks.map(currentTask => {
-
-            const {title, desc, deadline, priority} = currentTask;
-
-            const task = document.createElement('div');
-            task.classList.add('task');
-            task.setAttribute('id', `prj-${project.id}_tsk-${currentTask.taskId}`)
-            task.setAttribute('data-ProjectId', project.id);
-            task.setAttribute('data-taskId', currentTask.taskId);
-
-            // Priority Color top bar
-            const priorityBar = document.createElement('span');
-            priorityBar.classList += `priority-bar ${priority}`;
-
-            // Task Title
-            const taskTitle = document.createElement('h2');
-            taskTitle.classList += 'title';
-            taskTitle.textContent = title;
-
-            // Time left
-            const taskTimeLeft = document.createElement('span');
-            taskTimeLeft.classList += 'time-left';
-            taskTimeLeft.innerHTML = `<i class="fa-solid fa-stopwatch"></i>&nbsp;${this.getTimeLeft(deadline)}`;
-
-            // Description
-            const taskDesc = document.createElement('p');
-            taskDesc.classList += 'desc';
-            taskDesc.textContent = desc;
-
-            // Due Date
-            const taskDueDate = document.createElement('h3');
-            taskDueDate.classList += 'time';
-            taskDueDate.textContent = `Due date: ${this.getFormattedTime(deadline)}`;
-
-            // Priority
-            const taskPriority = document.createElement('h3');
-            taskPriority.classList += 'priority';
-            taskPriority.innerHTML = `Priority: <span class="color-${priority}">${priority}</span>`;
-
-            // Project
-            const taskProject = document.createElement('h3');
-            taskProject.classList += 'project';
-            taskProject.textContent = `Project: ${projectName}`;
-
-            // Task Actions
-            const taskActions = document.createElement('div');
-            taskActions.classList += 'task-actions';
-
-            const editTaskBtn = document.createElement('button');
-            editTaskBtn.classList += 'edit-task btn';
-            editTaskBtn.setAttribute('id', 'open-edit-task-model');
-            editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`;
-            editTaskBtn.addEventListener('click', () => this.openEditTaskModel(currentTask.projectId, currentTask.taskId))
-
-            const deleteTaskBtn = document.createElement('button');
-            deleteTaskBtn.classList += 'delete-task btn'
-            deleteTaskBtn.setAttribute('id', 'delete-task-btn');
-            deleteTaskBtn.innerHTML = `<i class="fa-regular fa-trash-can delete-icon"></i><span>Delete</span>`
-            deleteTaskBtn.addEventListener('click', () => Task.deleteTask(currentTask.projectId, currentTask.taskId))
-
-            const completeTaskBtn = document.createElement('button');
-            completeTaskBtn.classList += 'complete-task btn';
-            completeTaskBtn.setAttribute('id', 'complete-task-btn');
-            completeTaskBtn.innerHTML = `<i class="fa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
-            completeTaskBtn.addEventListener('click', () => Task.completeTask(currentTask.projectId, currentTask.taskId))
-
-           taskActions.appendChild(editTaskBtn);
-           taskActions.appendChild(deleteTaskBtn);
-           taskActions.appendChild(completeTaskBtn);
-
-            // Appending
-            task.appendChild(priorityBar);
-            task.appendChild(taskTitle);
-            task.appendChild(taskTimeLeft);
-            task.appendChild(taskDesc);
-            task.appendChild(taskDueDate);
-            task.appendChild(taskPriority);
-            task.appendChild(taskProject);
-            task.appendChild(taskActions);
-
-            Task.taskContainer.appendChild(task);
+            const task = this.createTaskUiElement(currentTask);
+            Task.taskContainer.appendChild(task);   
         })
+    }
+
+    static createTaskUiElement(currentTask) {
+        const {title, desc, deadline, priority, projectId, taskId} = currentTask;
+
+        const project = Project.getProject(projectId);
+
+        const task = document.createElement('div');
+        task.classList.add('task');
+        task.setAttribute('id', `prj-${projectId}_tsk-${taskId}`)
+        task.setAttribute('data-ProjectId', projectId);
+        task.setAttribute('data-taskId', taskId);
+
+        // Priority Color top bar
+        const priorityBar = document.createElement('span');
+        priorityBar.classList += `priority-bar ${priority}`;
+
+        // Task Title
+        const taskTitle = document.createElement('h2');
+        taskTitle.classList += 'title';
+        taskTitle.textContent = title;
+
+        // Time left
+        const taskTimeLeft = document.createElement('span');
+        taskTimeLeft.classList += 'time-left';
+        taskTimeLeft.innerHTML = `<i class="fa-solid fa-stopwatch"></i>&nbsp;${this.getTimeLeft(deadline)}`;
+
+        // Description
+        const taskDesc = document.createElement('p');
+        taskDesc.classList += 'desc';
+        taskDesc.textContent = desc;
+
+        // Due Date
+        const taskDueDate = document.createElement('h3');
+        taskDueDate.classList += 'time';
+        taskDueDate.textContent = `Due date: ${this.getFormattedTime(deadline)}`;
+
+        // Priority
+        const taskPriority = document.createElement('h3');
+        taskPriority.classList += 'priority';
+        taskPriority.innerHTML = `Priority: <span class="color-${priority}">${priority}</span>`;
+
+        // Project
+        const taskProject = document.createElement('h3');
+        taskProject.classList += 'project';
+        taskProject.textContent = `Project: ${project.name}`;
+
+        // Task Actions
+        const taskActions = document.createElement('div');
+        taskActions.classList += 'task-actions';
+
+        const editTaskBtn = document.createElement('button');
+        editTaskBtn.classList += 'edit-task btn';
+        editTaskBtn.setAttribute('id', 'open-edit-task-model');
+        editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`;
+        editTaskBtn.addEventListener('click', () => this.openEditTaskModel(projectId, taskId))
+
+        const deleteTaskBtn = document.createElement('button');
+        deleteTaskBtn.classList += 'delete-task btn'
+        deleteTaskBtn.setAttribute('id', 'delete-task-btn');
+        deleteTaskBtn.innerHTML = `<i class="fa-regular fa-trash-can delete-icon"></i><span>Delete</span>`
+        deleteTaskBtn.addEventListener('click', () => Task.deleteTask(projectId, taskId))
+
+        const completeTaskBtn = document.createElement('button');
+        completeTaskBtn.classList += 'complete-task btn';
+        completeTaskBtn.setAttribute('id', 'complete-task-btn');
+        completeTaskBtn.innerHTML = `<i class="fa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
+        completeTaskBtn.addEventListener('click', () => Task.completeTask(projectId, taskId))
+
+        taskActions.appendChild(editTaskBtn);
+        taskActions.appendChild(deleteTaskBtn);
+        taskActions.appendChild(completeTaskBtn);
+
+        // Appending
+        task.appendChild(priorityBar);
+        task.appendChild(taskTitle);
+        task.appendChild(taskTimeLeft);
+        task.appendChild(taskDesc);
+        task.appendChild(taskDueDate);
+        task.appendChild(taskPriority);
+        task.appendChild(taskProject);
+        task.appendChild(taskActions);
+
+        return task;
     }
 
     // Formats time&date e.g. 21:09 => 11:09 PM && 2022-12-3 => 3 December, 2022
     static getFormattedTime(time) {
         const {dueTime, dueDate} = time;
-        const year = dueDate.slice(0, 4);
-        const month = dueDate.slice(5, 7);
-        const day = dueDate.slice(8, 10);
-        const date = new Date(year, month, day);
+        const date = new Date(dueDate);
         date.setHours(dueTime.slice(0,2), dueTime.slice(3,5));
         const formattedTime = format(date, 'p');
         const formattedDate = format(date, 'PP');
@@ -214,13 +218,10 @@ export default class UI {
 
     static getTimeLeft(time) {
         const {dueTime, dueDate} = time;
-        const endYear = dueDate.slice(0, 4);
-        const endMonth = dueDate.slice(5, 7);
-        const endDay = dueDate.slice(8, 10);
         const endHour = dueTime.slice(0, 2);
         const endMin = dueTime.slice(3, 5);
         const presentDate = new Date();
-        const taskDueDate = new Date(endYear, endMonth, endDay);
+        const taskDueDate = new Date(dueDate);
         taskDueDate.setHours(endHour, endMin);
         const timeLeft = new Date(taskDueDate.getTime() - presentDate.getTime());
         const days = timeLeft.getUTCDate() - 1; // Gives day count of difference
@@ -338,6 +339,78 @@ export default class UI {
     static closeEditTaskModel() {
         const editTaskModel = document.getElementById('edit-task-model');
         document.body.removeChild(editTaskModel);
+    }
+
+    static renderTasks(type) {
+
+        [...document.querySelectorAll('.nav_link')].map(link => link.classList.remove('active'));
+        UI.resetTaskContainer();
+        if(Task.taskList.length === 0) {
+            Task.taskContainer.classList.add('flex-1')
+            Task.taskContainer.innerHTML = `
+                <div class="no-task-wrapper">
+                    <h2>Oops! Looks like there are no <span>Tasks</span></h2>
+                </div>
+            `
+            return;
+        }
+
+        Task.taskContainer.classList.remove('flex-1');
+
+        if(type === 'ALL_TASKS') {
+            this.renderAllTasks();
+        }
+
+        if(type === 'TODAY_TASKS') {
+            this.renderTodayTasks();
+        }
+
+        if(type === 'WEEK_TASKS') {
+            this.renderWeekTasks()
+        }
+    }
+    
+    static renderAllTasks() {
+        UI.renderProjectTitle('All tasks');
+        document.getElementById('list_all_tasks').classList.add('active');
+        Task.taskList.map(currentTask => {
+            const task = UI.createTaskUiElement(currentTask);
+            Task.taskContainer.appendChild(task);
+        })
+    }
+
+    static renderTodayTasks() {
+        UI.renderProjectTitle('Today tasks');
+        document.getElementById('list_today_tasks').classList.add('active');
+        
+        Task.taskList.map(currentTask => {
+            const taskDate = currentTask.deadline.dueDate;
+            const presentDate = new Date().getDate();
+            console.log(taskDate.slice(-2))
+            if(parseInt(taskDate.slice(-2)) == presentDate) {
+                const task = UI.createTaskUiElement(currentTask);
+                Task.taskContainer.appendChild(task);
+            }
+        })
+    }
+    
+    static renderWeekTasks() {
+        UI.renderProjectTitle('Week tasks');
+        document.getElementById('list_week_tasks').classList.add('active');
+        
+        Task.taskList.map(currentTask => {
+
+            const {dueDate} = currentTask.deadline;
+            const presentDate = new Date();
+            const taskDueDate = new Date(dueDate);
+            const difference = differenceInDays(taskDueDate, presentDate);
+            
+            if(difference < 7) {
+                const task = UI.createTaskUiElement(currentTask);
+                Task.taskContainer.appendChild(task);
+            }
+
+        })
     }
 
 }
