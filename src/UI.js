@@ -120,7 +120,7 @@ export default class UI {
         })
     }
 
-    static createTaskUiElement(currentTask) {
+    static createTaskUiElement(currentTask, renderType = "Project") {
         const {title, desc, deadline, priority, projectId, taskId} = currentTask;
 
         const project = Project.getProject(projectId);
@@ -173,19 +173,19 @@ export default class UI {
         editTaskBtn.classList += 'edit-task btn';
         editTaskBtn.setAttribute('id', 'open-edit-task-model');
         editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`;
-        editTaskBtn.addEventListener('click', () => this.openEditTaskModel(projectId, taskId))
+        editTaskBtn.addEventListener('click', () => this.openEditTaskModel(projectId, taskId, renderType))
 
         const deleteTaskBtn = document.createElement('button');
         deleteTaskBtn.classList += 'delete-task btn'
         deleteTaskBtn.setAttribute('id', 'delete-task-btn');
         deleteTaskBtn.innerHTML = `<i class="fa-regular fa-trash-can delete-icon"></i><span>Delete</span>`
-        deleteTaskBtn.addEventListener('click', () => Task.deleteTask(projectId, taskId))
+        deleteTaskBtn.addEventListener('click', () => Task.deleteTask(projectId, taskId, renderType))
 
         const completeTaskBtn = document.createElement('button');
         completeTaskBtn.classList += 'complete-task btn';
         completeTaskBtn.setAttribute('id', 'complete-task-btn');
         completeTaskBtn.innerHTML = `<i class="fa-solid fa-circle-check complete-icon"></i><span>Complete</span>`
-        completeTaskBtn.addEventListener('click', () => Task.completeTask(projectId, taskId))
+        completeTaskBtn.addEventListener('click', () => Task.completeTask(projectId, taskId, renderType))
 
         taskActions.appendChild(editTaskBtn);
         taskActions.appendChild(deleteTaskBtn);
@@ -238,7 +238,7 @@ export default class UI {
         document.getElementById('project-title-wrapper').innerHTML = '';
     }
 
-    static openEditTaskModel(projectId, taskId) {
+    static openEditTaskModel(projectId, taskId, renderType) {
         
         const project = Project.getProject(projectId);
         const {name, tasks} = project;
@@ -332,7 +332,7 @@ export default class UI {
         </form>`
 
         document.body.appendChild(editTaskModel);
-        document.getElementById('edit-task-btn').addEventListener('click', () => Task.editTask(projectId, taskId));
+        document.getElementById('edit-task-btn').addEventListener('click', () => Task.editTask(projectId, taskId, renderType));
         document.getElementById('cancel-edit-task-btn').addEventListener('click', this.closeEditTaskModel)
     }
 
@@ -374,7 +374,7 @@ export default class UI {
         UI.renderProjectTitle('All tasks');
         document.getElementById('list_all_tasks').classList.add('active');
         Task.taskList.map(currentTask => {
-            const task = UI.createTaskUiElement(currentTask);
+            const task = UI.createTaskUiElement(currentTask, 'ALL_TASKS');
             Task.taskContainer.appendChild(task);
         })
     }
@@ -384,17 +384,28 @@ export default class UI {
         document.getElementById('list_today_tasks').classList.add('active');
         
         Task.taskList.map(currentTask => {
+            let isEmpty = true;
             const taskDate = currentTask.deadline.dueDate;
             const presentDate = new Date().getDate();
             console.log(taskDate.slice(-2))
             if(parseInt(taskDate.slice(-2)) == presentDate) {
-                const task = UI.createTaskUiElement(currentTask);
+                const task = UI.createTaskUiElement(currentTask, 'TODAY_TASKS');
                 Task.taskContainer.appendChild(task);
+                isEmpty = false;
             }
         })
+
+        if(isEmpty) {
+            Task.taskContainer.classList.add('flex-1')
+            Task.taskContainer.innerHTML = `
+                <div class="no-task-wrapper">
+                    <h2>Oops! Looks like there are no <span>Tasks</span></h2>
+                </div>`
+        }
     }
     
     static renderWeekTasks() {
+        let isEmpty = true;
         UI.renderProjectTitle('Week tasks');
         document.getElementById('list_week_tasks').classList.add('active');
         
@@ -406,11 +417,21 @@ export default class UI {
             const difference = differenceInDays(taskDueDate, presentDate);
             
             if(difference < 7) {
-                const task = UI.createTaskUiElement(currentTask);
+                const task = UI.createTaskUiElement(currentTask, 'WEEK_TASKS');
                 Task.taskContainer.appendChild(task);
+                isEmpty = false;
             }
 
         })
+
+        if(isEmpty) {
+            Task.taskContainer.classList.add('flex-1')
+            Task.taskContainer.innerHTML = `
+                <div class="no-task-wrapper">
+                    <h2>Oops! Looks like there are no <span>Tasks</span></h2>
+                </div>`
+        }
+
     }
 
 }

@@ -41,7 +41,7 @@ export default class Task {
     UI.closeAddTaskModel();
   };
 
-  static deleteTask(projectId, taskId) {
+  static deleteTask(projectId, taskId, renderType) {
     Project.removeTaskFromProjectList(projectId, taskId);
     Task.removeTaskFromTaskList(taskId);
     // Updates local storage
@@ -49,10 +49,25 @@ export default class Task {
     BrowserStorage.updateTaskList();
     // Removes the Task from the DOM 
     const project = Project.getProject(projectId);
-    UI.renderProjectTasks(project);
+    switch (renderType) {
+        case 'ALL_TASKS': 
+            UI.renderTasks(renderType)
+            break;
+        
+        case 'TODAY_TASKS': 
+            UI.renderTasks(renderType)
+            break;
+        
+        case 'WEEK_TASKS': 
+            UI.renderTasks(renderType)
+            break;
+        
+        default: 
+            UI.renderProjectTasks(project);
+    }
   }
 
-  static editTask(projectId, taskId) {
+  static editTask(projectId, taskId, renderType) {
     const newTitle = document.getElementById("new-task-title").value;
     const newDesc = document.getElementById("new-task-desc").value;
     const newDeadline = {
@@ -94,7 +109,22 @@ export default class Task {
     BrowserStorage.updateTaskList();
 
     // Updates the DOM
-    UI.renderProjectTasks(Project.projectList[projectIndex]);
+    switch (renderType) {
+        case 'ALL_TASKS': 
+            UI.renderTasks(renderType)
+            break;
+        
+        case 'TODAY_TASKS': 
+            UI.renderTasks(renderType)
+            break;
+        
+        case 'WEEK_TASKS': 
+            UI.renderTasks(renderType)
+            break;
+        
+        default: 
+            UI.renderProjectTasks(Project.projectList[projectIndex]);
+    }
     UI.closeEditTaskModel();
   }
 
