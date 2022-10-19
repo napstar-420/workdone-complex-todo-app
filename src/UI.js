@@ -41,7 +41,7 @@ export default class UI {
         UI.removeErrorMsg();
     }
 
-    // Creates a link to add to the side nav
+    // Creates a link to add to the side nav (Projects tab)
     static createProjectLink({name, id}) {
         const linkWrapper = document.createElement('span');
         linkWrapper.classList = 'projectLink-wrapper'
@@ -112,6 +112,7 @@ export default class UI {
         const projectName = project.name;
         this.renderProjectTitle(projectName)
 
+        // Here the Rendering start
         project.tasks.map(currentTask => {
 
             const {title, desc, deadline, priority} = currentTask;
@@ -161,15 +162,15 @@ export default class UI {
 
             const editTaskBtn = document.createElement('button');
             editTaskBtn.classList += 'edit-task btn';
-            editTaskBtn.setAttribute('id', 'edit-task-btn');
+            editTaskBtn.setAttribute('id', 'open-edit-task-model');
             editTaskBtn.innerHTML = `<i class="fa-sharp fa-solid fa-pen edit-icon"></i><span>Edit</span>`;
-            editTaskBtn.addEventListener('click', () => Task.editTask())
+            editTaskBtn.addEventListener('click', () => this.openEditTaskModel(currentTask.projectId, currentTask.taskId))
 
             const deleteTaskBtn = document.createElement('button');
             deleteTaskBtn.classList += 'delete-task btn'
             deleteTaskBtn.setAttribute('id', 'delete-task-btn');
             deleteTaskBtn.innerHTML = `<i class="fa-regular fa-trash-can delete-icon"></i><span>Delete</span>`
-            deleteTaskBtn.addEventListener('click', () => Task.deleteTask(parseInt(currentTask.projectId), currentTask.taskId))
+            deleteTaskBtn.addEventListener('click', () => Task.deleteTask(currentTask.projectId, currentTask.taskId))
 
             const completeTaskBtn = document.createElement('button');
             completeTaskBtn.classList += 'complete-task btn';
@@ -232,6 +233,109 @@ export default class UI {
     static resetTaskContainer() {
         Task.taskContainer.innerHTML = '';
         document.getElementById('project-title-wrapper').innerHTML = '';
+    }
+
+    static openEditTaskModel(projectId, taskId) {
+        
+        const project = Project.getProject(projectId);
+        const {name, tasks} = project;
+
+        let task = {};
+        tasks.map(currentTask => currentTask.taskId === taskId ? task = currentTask : '');
+
+        const editTaskModel = document.createElement('div');
+        editTaskModel.classList += 'model';
+        editTaskModel.setAttribute('id', 'edit-task-model');
+        editTaskModel.innerHTML = `
+        <form action="" onSubmit="return false" onReset="return false" class="add-task-form" id="edit-task-form">
+          <span>
+            <h2>Edit Task</h2>
+          </span>
+          <span>
+            <label for="task-title" class="label">New Title*</label>
+            <input
+              class="form-control"
+              type="text"
+              id="new-task-title"
+              name="task-title"
+              value="${task.title}"
+              placeholder="Meeting with John"
+              required
+              autocomplete="off"
+            />
+          </span>
+          <span>
+            <label for="task-desc" class="label">New Description*</label>
+            <textarea
+              class="form-control"
+              placeholder="John will wait at the society park."
+              style="resize: none"
+              name="task-desc"
+              id="new-task-desc"
+              cols="30"
+              rows="5"
+              required
+              autocomplete="off"
+            >${task.desc}</textarea>
+          </span>
+          <span class="due-date-span">
+            <label for="task-due-date" class="label">New Due Date*</label>
+            <span>
+              <input
+                class="form-control"
+                type="time"
+                name="task-due-time"
+                id="new-task-due-time"
+                value="${task.deadline.dueTime}"
+              />
+              <input
+                class="form-control"
+                type="date"
+                name="task-due-date"
+                id="new-task-due-date"
+                value="${task.deadline.dueDate}"
+                required
+              />
+            </span>
+          </span>
+          <span class="priority-span">
+            <label for="task-priority" class="label">Priority</label>
+            <select name="task-priority" class="form-control" id="new-task-priority">
+              <option value="low" class="color-low" ${task.priority === 'low' ? 'selected' : ""}>Low</option>
+              <option value="medium" class="color-medium" ${task.priority === 'medium' ? 'selected' : ""}>Medium</option>
+              <option value="high" class="color-high" ${task.priority === 'high' ? 'selected' : ""}>High</option>
+            </select>
+          </span>
+          <span class="project-span">
+            <label for="task-project" class="label">Project</label>
+            <select
+              class="form-control"
+              name="task-project"
+              id="task-project"
+              disabled
+              required
+            >
+              <option value="${task.projectId}">
+                ${name}
+              </option>
+            </select>
+          </span>
+          <button type="submit" id="edit-task-btn" class="btn add-btn">
+            Edit Task
+          </button>
+          <button type="reset" id="cancel-edit-task-btn" class="btn cancel-btn">
+            Cancel
+          </button>
+        </form>`
+
+        document.body.appendChild(editTaskModel);
+        document.getElementById('edit-task-btn').addEventListener('click', () => Task.editTask(projectId, taskId));
+        document.getElementById('cancel-edit-task-btn').addEventListener('click', this.closeEditTaskModel)
+    }
+
+    static closeEditTaskModel() {
+        const editTaskModel = document.getElementById('edit-task-model');
+        document.body.removeChild(editTaskModel);
     }
 
 }

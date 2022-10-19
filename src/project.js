@@ -59,14 +59,19 @@ export default class Project {
     };
 
     static deleteProject(id) {
+
+        // Removes Project
+        this.projectList = [...Project.projectList.filter(project => project.id !== id)];
+        Task.taskList = [...Task.taskList.filter(task => task.projectId !== id)];
+
+        // Updates the localStorage
+        BrowserStorage.updateStorage();
+        BrowserStorage.updateTaskList();
+
+        // Updates DOM
         if(this.isProjectOpened(id) === true) {
             UI.resetTaskContainer()
         }
-        this.projectList = [...Project.projectList.filter(project => project.id !== id)];
-        Task.taskList = [...Task.taskList.filter(task => parseInt(task.projectId) !== id)];
-        console.log(Task.taskList)
-        BrowserStorage.updateStorage();
-        BrowserStorage.updateTaskList();
         UI.renderProjectsTab();
     }
 
@@ -78,9 +83,10 @@ export default class Project {
                 link.classList.add('active');
             }
         })
+        // Updates the isOpened property
         Project.projectList.map(project => {
             project.isOpened = false;
-            if(project.id === parseInt(projectId)) {
+            if(project.id === projectId) {
                 UI.renderTasks(project);
                 project.isOpened = true;
             }
