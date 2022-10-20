@@ -132,11 +132,11 @@ export default class Task {
     Task.taskList = Task.taskList.filter((task) => task.taskId !== id);
   }
 
-  static completeTask(projectId, taskId) {
+  static completeTask(projectId, taskId, renderType) {
     const taskUiElement = document.getElementById(`prj-${projectId}_tsk-${taskId}`);
     taskUiElement.classList.add('task-completed');
     setTimeout(() => {
-        this.deleteTask(projectId, taskId)
+        this.deleteTask(projectId, taskId, renderType)
     }, 2000);
   }
 

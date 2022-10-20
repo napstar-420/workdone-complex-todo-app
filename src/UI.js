@@ -382,9 +382,9 @@ export default class UI {
     static renderTodayTasks() {
         UI.renderProjectTitle('Today tasks');
         document.getElementById('list_today_tasks').classList.add('active');
+        let isEmpty = true;
         
         Task.taskList.map(currentTask => {
-            let isEmpty = true;
             const taskDate = currentTask.deadline.dueDate;
             const presentDate = new Date().getDate();
             console.log(taskDate.slice(-2))
