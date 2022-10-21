@@ -455,3 +455,6 @@ function expandNav(e) {
         isNavShowing = false;
     }
 }
+
+document.getElementById('login-btn').addEventListener('click', ()=>alert("Sorry! we don't support this feature right now."))
+document.getElementById('sign-up-btn').addEventListener('click', ()=>alert("Sorry! we don't support this feature right now."))

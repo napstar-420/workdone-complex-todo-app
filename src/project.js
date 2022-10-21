@@ -63,6 +63,10 @@ export default class Project {
         // Updates DOM
         if(this.isProjectOpened(id) === true) {
             UI.resetTaskContainer()
+            Task.taskContainer.innerHTML = `<div class="default-task-container">
+            <h2>Let's start by making or opening a <span>Project</span>.</h2>
+            <img src="./home_svg.svg" alt="" width="300px">
+          </div>`
         }
         // Removes Project
         this.projectList = [...Project.projectList.filter(project => project.id !== id)];
