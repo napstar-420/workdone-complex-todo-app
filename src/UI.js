@@ -435,3 +435,23 @@ export default class UI {
     }
 
 }
+
+const expandNavBtn = document.getElementById('expand_nav');
+expandNavBtn.addEventListener('click', expandNav);
+let isNavShowing = false
+
+function expandNav(e) {
+    if(isNavShowing === false) {
+        document.querySelector('.projects-tab-container').style.display = 'flex';
+        expandNavBtn.innerHTML = `<span class="material-symbols-outlined">
+                                    keyboard_double_arrow_down
+                                  </span>`
+        isNavShowing = true;
+    } else {
+        document.querySelector('.projects-tab-container').style.display = 'none'
+        expandNavBtn.innerHTML = `<span class="material-symbols-outlined">
+        keyboard_double_arrow_up
+    </span>`
+        isNavShowing = false;
+    }
+}

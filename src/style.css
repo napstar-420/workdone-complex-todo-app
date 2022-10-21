@@ -8,7 +8,7 @@
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
     position: relative;
     left: 5px;
 }
@@ -30,6 +30,8 @@
     font-size: 1rem;
     scroll-behavior: smooth;
 }
+
+/* GLOBAL STYLING */
 
 body {
     background-color: #151515;
@@ -85,7 +87,7 @@ body {
 
 header {
     /* background: linear-gradient(90deg, rgba(8,234,133,1) 0%, rgba(8,234,201,1) 100%); */
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     height: 4rem;
     display: flex;
     justify-content: space-between;
@@ -130,8 +132,17 @@ nav {
     position: relative;
 }
 
+.tasks_links_wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
 .projects-tab-container {
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
 }
 
 .projectLink-wrapper {
@@ -168,11 +179,6 @@ nav:hover {
     background-color: #202020;
 }
 
-nav div:not(.add-project-model) {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
-}
 
 nav h2 {
     font-size: 1.5rem;
@@ -203,6 +209,10 @@ nav h2 {
 
 .nav_link:hover, .nav_link.active {
     background-color: var(--main-color);
+}
+
+#expand_nav {
+    display: none;
 }
 
 /* ADD PROJECT MODEL STYLING */
@@ -297,7 +307,7 @@ nav h2 {
 }
 
 #project-title-wrapper {
-    margin-bottom: 1rem;
+    margin: 0  0 1rem 0;
 }
 
 #project-title-wrapper h1 {
@@ -384,8 +394,9 @@ nav h2 {
 .priority-bar {
     position: absolute;
     top: 0%;
+    left: 0%;
     width: 100%;
-    height: 10px;
+    height: 8px;
     background-color: #101010;
 }
 
@@ -514,4 +525,160 @@ nav h2 {
 .no-task-wrapper span {
     color: var(--main-color);
     font-size: inherit;
+}
+
+@media only screen and (max-width: 786px){
+    .header-btn-wrapper {
+        display: none;
+    }
+
+    main {
+        display: initial;
+    }
+
+    nav {
+        position: fixed;
+        bottom: 0%;
+        flex-direction: column;
+        width: 100vw;
+        max-height: 100vh;
+        height: max-content;
+        padding: 0;
+        z-index: 10;
+        padding: 0.5rem;
+        background-color: #202020;
+        transition: var(--transition);
+    }
+
+    .tasks_links_wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        margin-bottom: 0;
+        width: 100%;
+    }
+
+    .projects-tab-container {
+        margin-top: 0.2rem;
+        display: none;
+    }
+
+    .projects-tab-container h2 {
+        margin: 0.5rem;
+    }
+
+    #projects-tab {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .nav_link {
+        flex: 1;
+        padding: 0.5rem 0.1rem;
+        margin: 0 0.2rem;
+        color: #fff;
+        /* flex-direction: column; */
+        flex-wrap: wrap;
+        font-weight: 400;
+    }
+
+    .nav_link span {
+        margin-bottom: 5px;
+    }
+    
+    #expand_nav {
+        display: block;
+        flex: 0;
+        padding: 0.5rem 0.3rem;
+    }
+    
+    #expand_nav span {
+        margin: 0;
+        margin-top: 0.2rem;
+    }
+    
+    #projects-tab .nav_link {
+        line-break: anywhere;
+    }
+
+    #open-project-model-btn {
+        font-weight: 700;
+    }
+
+    .main-container {
+        margin: 0;
+    }
+
+    .top-container {
+        margin: 1rem;
+    }
+
+    #task-container {
+        /* overflow-x: hidden; */
+        padding: 0.5rem;
+        padding-bottom: 10rem;
+    }
+
+    .task {
+        width: calc(100% - 10px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-actions {
+        width: 100%;
+    }
+
+    .edit-task span, .delete-task span{
+        display: none;
+    }
+
+    .edit-task i, .delete-task i {
+        margin: 0;
+    }
+
+    .no-task-wrapper h2 {
+        font-size: 1.5rem;
+        position: relative;
+        bottom: 4rem;
+    }
+
+    .open-task-model-btn {
+        position: fixed;
+        bottom: 5rem;
+        right: 1rem;
+        border-radius: 50%;
+        padding: 1.5rem;
+        z-index: 5;
+    }
+    
+    .open-task-model-btn .material-icons {
+        transform: scale(1.8);
+        margin: 0 !important;
+    }
+
+    .open-task-model-btn .content {
+        display: none;
+    }
+
+    #add-task-model {
+        z-index: 15;
+    }
+
+    #project-title-wrapper {
+        margin: 0.5rem 0.5rem 0.5rem 1rem;
+    }
+
+    #project-title-wrapper h1 {
+        font-family: var(--main-font);
+    }
+}
+
+@media only screen and (max-width: 425px){
+    .no-task-wrapper h2 {
+        width: 80%;
+    }
 }
