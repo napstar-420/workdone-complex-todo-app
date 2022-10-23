@@ -50,16 +50,16 @@ export default class Task {
     // Removes the Task from the DOM 
     const project = Project.getProject(projectId);
     switch (renderType) {
-        case 'ALL_TASKS': 
-            UI.renderTasks(renderType)
+        case "ALL_TASKS": 
+            UI.renderTasks(renderType);
             break;
         
-        case 'TODAY_TASKS': 
-            UI.renderTasks(renderType)
+        case "TODAY_TASKS": 
+            UI.renderTasks(renderType);
             break;
         
-        case 'WEEK_TASKS': 
-            UI.renderTasks(renderType)
+        case "WEEK_TASKS": 
+            UI.renderTasks(renderType);
             break;
         
         default: 
@@ -110,16 +110,16 @@ export default class Task {
 
     // Updates the DOM
     switch (renderType) {
-        case 'ALL_TASKS': 
-            UI.renderTasks(renderType)
+        case "ALL_TASKS":
+            UI.renderTasks(renderType);
             break;
         
-        case 'TODAY_TASKS': 
-            UI.renderTasks(renderType)
+        case "TODAY_TASKS": 
+            UI.renderTasks(renderType);
             break;
         
-        case 'WEEK_TASKS': 
-            UI.renderTasks(renderType)
+        case "WEEK_TASKS": 
+            UI.renderTasks(renderType);
             break;
         
         default: 
@@ -134,9 +134,9 @@ export default class Task {
 
   static completeTask(projectId, taskId, renderType) {
     const taskUiElement = document.getElementById(`prj-${projectId}_tsk-${taskId}`);
-    taskUiElement.classList.add('task-completed');
+    taskUiElement.classList.add("task-completed");
     setTimeout(() => {
-        this.deleteTask(projectId, taskId, renderType)
+        this.deleteTask(projectId, taskId, renderType);
     }, 2000);
   }
 

@@ -28,7 +28,7 @@ export default class Project {
     // Adds Created project to the Project list
     static addProject = function addProjectToProductList(project, list) {
         list.push(project);
-        BrowserStorage.updateStorage()
+        BrowserStorage.updateStorage();
     };
 
     // Creates a new Project
@@ -62,11 +62,11 @@ export default class Project {
 
         // Updates DOM
         if(this.isProjectOpened(id) === true) {
-            UI.resetTaskContainer()
+            UI.resetTaskContainer();
             Task.taskContainer.innerHTML = `<div class="default-task-container">
             <h2>Let's start by making or opening a <span>Project</span>.</h2>
             <img src="./home_svg.svg" alt="" width="300px">
-          </div>`
+          </div>`;
         }
         // Removes Project
         this.projectList = [...Project.projectList.filter(project => project.id !== id)];
@@ -81,12 +81,12 @@ export default class Project {
 
     // Opens Project when users clicks a Project link
     static openProject(projectId) {
-        [...document.querySelectorAll('.nav_link')].map(link => link.classList.remove('active'));
-        [...document.querySelectorAll('.nav_link')].map(link => {
-            if(parseInt(link.getAttribute('data-projectId')) === projectId){
-                link.classList.add('active');
+        [...document.querySelectorAll(".nav_link")].map(link => link.classList.remove("active"));
+        [...document.querySelectorAll(".nav_link")].map(link => {
+            if(parseInt(link.getAttribute("data-projectId")) === projectId){
+                link.classList.add("active");
             }
-        })
+        });
         // Updates the isOpened property
         Project.projectList.map(project => {
             project.isOpened = false;
@@ -94,20 +94,20 @@ export default class Project {
                 UI.renderProjectTasks(project);
                 project.isOpened = true;
             }
-        })
+        });
     }
 
     
     static removeTaskFromProjectList(projectId, taskId) {
         Project.projectList.map(project => {
             if(project.id === projectId) {
-                project.tasks = project.tasks.filter(task => task.taskId !== taskId)
+                project.tasks = project.tasks.filter(task => task.taskId !== taskId);
             }
         });
     }
 
     static getProject(id) {
-        let projectObj = {}
+        let projectObj = {};
         Project.projectList.map(project => {
             if(project.id === id) {
                 projectObj = {...project};
