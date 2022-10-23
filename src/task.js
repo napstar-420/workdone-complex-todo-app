@@ -30,7 +30,7 @@ export default class Task {
 
   static addTask = function forwardTaskToProjectListAndTaskList(task) {
     // we have use unshift instead of push because when we add task to DOM, latest task will be show first
-    Project.projectList[task.projectId].tasks.unshift(task); 
+    Project.projectList[task.projectId].tasks.unshift(task);
     Task.taskList.unshift(task);
     // opens the project
     Project.openProject(task.projectId);
@@ -47,23 +47,23 @@ export default class Task {
     // Updates local storage
     BrowserStorage.updateStorage();
     BrowserStorage.updateTaskList();
-    // Removes the Task from the DOM 
+    // Removes the Task from the DOM
     const project = Project.getProject(projectId);
     switch (renderType) {
-        case "ALL_TASKS": 
-            UI.renderTasks(renderType);
-            break;
-        
-        case "TODAY_TASKS": 
-            UI.renderTasks(renderType);
-            break;
-        
-        case "WEEK_TASKS": 
-            UI.renderTasks(renderType);
-            break;
-        
-        default: 
-            UI.renderProjectTasks(project);
+      case "ALL_TASKS":
+        UI.renderTasks(renderType);
+        break;
+
+      case "TODAY_TASKS":
+        UI.renderTasks(renderType);
+        break;
+
+      case "WEEK_TASKS":
+        UI.renderTasks(renderType);
+        break;
+
+      default:
+        UI.renderProjectTasks(project);
     }
   }
 
@@ -110,20 +110,20 @@ export default class Task {
 
     // Updates the DOM
     switch (renderType) {
-        case "ALL_TASKS":
-            UI.renderTasks(renderType);
-            break;
-        
-        case "TODAY_TASKS": 
-            UI.renderTasks(renderType);
-            break;
-        
-        case "WEEK_TASKS": 
-            UI.renderTasks(renderType);
-            break;
-        
-        default: 
-            UI.renderProjectTasks(Project.projectList[projectIndex]);
+      case "ALL_TASKS":
+        UI.renderTasks(renderType);
+        break;
+
+      case "TODAY_TASKS":
+        UI.renderTasks(renderType);
+        break;
+
+      case "WEEK_TASKS":
+        UI.renderTasks(renderType);
+        break;
+
+      default:
+        UI.renderProjectTasks(Project.projectList[projectIndex]);
     }
     UI.closeEditTaskModel();
   }
@@ -133,10 +133,12 @@ export default class Task {
   }
 
   static completeTask(projectId, taskId, renderType) {
-    const taskUiElement = document.getElementById(`prj-${projectId}_tsk-${taskId}`);
+    const taskUiElement = document.getElementById(
+      `prj-${projectId}_tsk-${taskId}`
+    );
     taskUiElement.classList.add("task-completed");
     setTimeout(() => {
-        this.deleteTask(projectId, taskId, renderType);
+      this.deleteTask(projectId, taskId, renderType);
     }, 2000);
   }
 

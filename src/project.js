@@ -3,135 +3,142 @@ import Task from "./task";
 import UI from "./UI";
 
 export default class Project {
-    // Stores all the Project
-    static projectList = [];
+  // Stores all the Project
+  static projectList = [];
 
-    // Button that open new Project Model
-    static openProjectModelBtn = document.getElementById(
-        "open-project-model-btn"
-    );
+  // Button that open new Project Model
+  static openProjectModelBtn = document.getElementById(
+    "open-project-model-btn"
+  );
 
-    // Button that creates a new Project
-    static createProjectBtn = document.getElementById("add-project-btn");
+  // Button that creates a new Project
+  static createProjectBtn = document.getElementById("add-project-btn");
 
-    // Button that closes the new Project model
-    static cancelAddProjectBtn = document.getElementById(
-        "cancel-add-project-btn"
-    );
+  // Button that closes the new Project model
+  static cancelAddProjectBtn = document.getElementById(
+    "cancel-add-project-btn"
+  );
 
-    // Where all the Project links are shown in the UI
-    static projectsTab = document.getElementById("projects-tab");
+  // Where all the Project links are shown in the UI
+  static projectsTab = document.getElementById("projects-tab");
 
-    // Input tag in which user can type new project name
-    static projectName = document.getElementById("project-title");
+  // Input tag in which user can type new project name
+  static projectName = document.getElementById("project-title");
 
-    // Adds Created project to the Project list
-    static addProject = function addProjectToProductList(project, list) {
-        list.push(project);
-        BrowserStorage.updateStorage();
-    };
+  // Adds Created project to the Project list
+  static addProject = function addProjectToProductList(project, list) {
+    list.push(project);
+    BrowserStorage.updateStorage();
+  };
 
-    // Creates a new Project
-    static createProject = function createProjectAndUpdateUI() {
-        const projectName = Project.projectName.value;
-        if (Project.checkProject(projectName) !== false) {
-            const project= new Project(projectName);
-            Project.addProject(project, Project.projectList);
-            UI.renderProjectsTab();
-            Project.projectName.value = "";
+  // Creates a new Project
+  static createProject = function createProjectAndUpdateUI() {
+    const projectName = Project.projectName.value;
+    if (Project.checkProject(projectName) !== false) {
+      const project = new Project(projectName);
+      Project.addProject(project, Project.projectList);
+      UI.renderProjectsTab();
+      Project.projectName.value = "";
+    }
+  };
+
+  // Check if Project name is valid and has not already been created
+  static checkProject = function checkIfProjectAlreadyExistAndNameIsValid(
+    name
+  ) {
+    let newProjectName = name;
+    newProjectName = newProjectName.trim();
+    if (newProjectName !== "") {
+      for (const project of Project.projectList) {
+        if (project.name === newProjectName) {
+          UI.createProjectNameErrorMsg(newProjectName);
+          return false;
         }
-    };
+      }
+      return true;
+    }
+    return false;
+  };
 
-    // Check if Project name is valid and has not already been created
-    static checkProject = function checkIfProjectAlreadyExistAndNameIsValid(name) {
-        let newProjectName = name;
-        newProjectName = newProjectName.trim();
-        if (newProjectName !== "") {
-            for(const project of Project.projectList) {
-                if(project.name === newProjectName) {
-                    UI.createProjectNameErrorMsg(newProjectName);
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    };
-
-    static deleteProject(id) {
-
-        // Updates DOM
-        if(this.isProjectOpened(id) === true) {
-            UI.resetTaskContainer();
-            Task.taskContainer.innerHTML = `<div class="default-task-container">
+  static deleteProject(id) {
+    // Updates DOM
+    if (this.isProjectOpened(id) === true) {
+      UI.resetTaskContainer();
+      Task.taskContainer.innerHTML = `<div class="default-task-container">
             <h2>Let's start by making or opening a <span>Project</span>.</h2>
             <img src="./home_svg.svg" alt="" width="300px">
           </div>`;
-        }
-        // Removes Project
-        this.projectList = [...Project.projectList.filter(project => project.id !== id)];
-        Task.taskList = [...Task.taskList.filter(task => task.projectId !== id)];
-
-        // Updates the localStorage
-        BrowserStorage.updateStorage();
-        BrowserStorage.updateTaskList();
-
-        UI.renderProjectsTab();
     }
+    // Removes Project
+    this.projectList = [
+      ...Project.projectList.filter((project) => project.id !== id),
+    ];
+    Task.taskList = [...Task.taskList.filter((task) => task.projectId !== id)];
 
-    // Opens Project when users clicks a Project link
-    static openProject(projectId) {
-        [...document.querySelectorAll(".nav_link")].map(link => link.classList.remove("active"));
-        [...document.querySelectorAll(".nav_link")].map(link => {
-            if(parseInt(link.getAttribute("data-projectId")) === projectId){
-                link.classList.add("active");
-            }
-        });
-        // Updates the isOpened property
-        Project.projectList.map(project => {
-            project.isOpened = false;
-            if(project.id === projectId) {
-                UI.renderProjectTasks(project);
-                project.isOpened = true;
-            }
-        });
-    }
+    // Updates the localStorage
+    BrowserStorage.updateStorage();
+    BrowserStorage.updateTaskList();
 
-    
-    static removeTaskFromProjectList(projectId, taskId) {
-        Project.projectList.map(project => {
-            if(project.id === projectId) {
-                project.tasks = project.tasks.filter(task => task.taskId !== taskId);
-            }
-        });
-    }
+    UI.renderProjectsTab();
+  }
 
-    static getProject(id) {
-        let projectObj = {};
-        Project.projectList.map(project => {
-            if(project.id === id) {
-                projectObj = {...project};
-            }
-        });
-        return projectObj;
-    }
+  // Opens Project when users clicks a Project link
+  static openProject(projectId) {
+    [...document.querySelectorAll(".nav_link")].map((link) =>
+      link.classList.remove("active")
+    );
+    [...document.querySelectorAll(".nav_link")].map((link) => {
+      if (parseInt(link.getAttribute("data-projectId")) === projectId) {
+        link.classList.add("active");
+      }
+    });
+    // Updates the isOpened property
+    Project.projectList.map((project) => {
+      project.isOpened = false;
+      if (project.id === projectId) {
+        UI.renderProjectTasks(project);
+        project.isOpened = true;
+      }
+    });
+  }
 
-    static isProjectOpened(id) {
-        const project = this.getProject(id);
-        if(project.isOpened === true) {
-            return true;
-        }
-    }
+  static removeTaskFromProjectList(projectId, taskId) {
+    Project.projectList.map((project) => {
+      if (project.id === projectId) {
+        project.tasks = project.tasks.filter((task) => task.taskId !== taskId);
+      }
+    });
+  }
 
-    constructor(name) {
-        this.name = name;
-        this.id = Project.projectList.length === 0 ? 0 : Project.projectList[Project.projectList.length - 1].id + 1;
-        this.isOpened = false;
-        this.tasks = [];
-    }
+  static getProject(id) {
+    let projectObj = {};
+    Project.projectList.map((project) => {
+      if (project.id === id) {
+        projectObj = { ...project };
+      }
+    });
+    return projectObj;
+  }
 
-    // Pushes task to Tasks array of the project
-    addTask(task) {
-        this.tasks.unshift(task);
+  static isProjectOpened(id) {
+    const project = this.getProject(id);
+    if (project.isOpened === true) {
+      return true;
     }
+  }
+
+  constructor(name) {
+    this.name = name;
+    this.id =
+      Project.projectList.length === 0
+        ? 0
+        : Project.projectList[Project.projectList.length - 1].id + 1;
+    this.isOpened = false;
+    this.tasks = [];
+  }
+
+  // Pushes task to Tasks array of the project
+  addTask(task) {
+    this.tasks.unshift(task);
+  }
 }
